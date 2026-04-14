@@ -23,10 +23,8 @@ os.environ["TESTCONTAINERS_RYUK_DISABLED"] = "true"
 test_user = {
     "uuid": "123342434563",
     "email": "user@example.com",
-    "password": "pass1234"
+    "password": "pass1234",
 }
-
-
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -48,15 +46,23 @@ async def engine(postgres_container):
         await conn.run_sync(Base.metadata.create_all)
 
         try:
-            await conn.execute(Role.__table__.insert(), [
-                {"name": "admin"},
-                {"name": "user"},
-            ])
-            await conn.execute(User.__table__.insert(), [
-                {"uuid": test_user["uuid"],
-                 "email": test_user["email"],
-                 "password": test_user["password"]},
-            ])
+            await conn.execute(
+                Role.__table__.insert(),
+                [
+                    {"name": "admin"},
+                    {"name": "user"},
+                ],
+            )
+            await conn.execute(
+                User.__table__.insert(),
+                [
+                    {
+                        "uuid": test_user["uuid"],
+                        "email": test_user["email"],
+                        "password": test_user["password"],
+                    },
+                ],
+            )
         except Exception as e:
             pass
 
@@ -82,7 +88,7 @@ async def client(db_session):
 
     app.dependency_overrides[get_session] = override_get_session
     async with AsyncClient(
-            transport=ASGITransport(app=app), base_url="http://test/api"
+        transport=ASGITransport(app=app), base_url="http://test/api"
     ) as ac:
         yield ac
 
@@ -90,12 +96,5 @@ async def client(db_session):
 
 
 def create_test_token(roles: list[str], sub: str = test_user["uuid"]):
-    payload = {
-        "sub": sub,
-        "roles": roles,
-        "exp": datetime.now() + timedelta(hours=1)
-    }
+    payload = {"sub": sub, "roles": roles, "exp": datetime.now() + timedelta(hours=1)}
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
-
-
-

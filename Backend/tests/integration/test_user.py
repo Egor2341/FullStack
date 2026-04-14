@@ -4,10 +4,7 @@ from sqlalchemy import select
 from data.entities.role import Role
 from tests.conftest import client, create_test_token
 
-test_user_data = {
-    "email": "test@example.com",
-    "password": "password123"
-}
+test_user_data = {"email": "test@example.com", "password": "password123"}
 
 
 @pytest.mark.asyncio
@@ -30,18 +27,20 @@ async def test_create_user(client):
 
 @pytest.mark.asyncio
 async def test_create_invalid_user(client):
-    response = await client.post("/auth/register", json={"email": "1231231", "password": "123123123"})
+    response = await client.post(
+        "/auth/register", json={"email": "1231231", "password": "123123123"}
+    )
     assert response.status_code == 422
 
 
 @pytest.mark.asyncio
 async def test_get_users(client):
     token = create_test_token(["admin"])
-    response = await client.get("/admin/users", headers={
-        "Authorization": f"Bearer {token}"
-    })
+    response = await client.get(
+        "/admin/users", headers={"Authorization": f"Bearer {token}"}
+    )
     assert response.status_code == 200
-    assert response.json() == [{'email': 'test@example.com', 'roles': ['user']}]
+    assert response.json() == [{"email": "test@example.com", "roles": ["user"]}]
 
 
 @pytest.mark.asyncio
@@ -50,9 +49,7 @@ async def test_add_admin(client):
     response = await client.post(
         "/admin/add",
         json={"email": "user@example.com"},
-        headers={
-            "Authorization": f"Bearer {token}"
-        }
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200
@@ -64,9 +61,7 @@ async def test_delete_admin(client):
     response = await client.post(
         "/admin/delete",
         json={"email": test_user_data["email"]},
-        headers={
-            "Authorization": f"Bearer {token}"
-        }
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200

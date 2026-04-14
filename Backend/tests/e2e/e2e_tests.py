@@ -25,8 +25,6 @@ def test_register(page):
     page.get_by_role("button", name="Создать личный кабинет").click()
 
 
-
-
 def test_user_crud(page):
     page.goto(f"{BASE_URL}/welcome")
 
@@ -99,8 +97,6 @@ def test_sort_pagination_and_s3(page):
 
     page.locator("input[type='file']").set_input_files("image.jpg")
     page.get_by_role("button", name="Загрузить").click()
-
-
 
     page.get_by_role("button", name="На главную").click()
 

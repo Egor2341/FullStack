@@ -1,10 +1,7 @@
 import pytest
 from tests.conftest import test_user, create_test_token
 
-test_category_dto = {
-    "name": "Rent",
-    "type": "expenses"
-}
+test_category_dto = {"name": "Rent", "type": "expenses"}
 
 
 @pytest.mark.asyncio
@@ -13,9 +10,7 @@ async def test_create_category(client):
     response = await client.post(
         "/categories",
         json=test_category_dto,
-        headers={
-            "Authorization": f"Bearer {token}"
-        }
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 201
@@ -25,10 +20,7 @@ async def test_create_category(client):
 async def test_get_categories(client):
     token = create_test_token(["user"])
     response = await client.get(
-        "/categories",
-        headers={
-            "Authorization": f"Bearer {token}"
-        }
+        "/categories", headers={"Authorization": f"Bearer {token}"}
     )
 
     assert response.status_code == 200

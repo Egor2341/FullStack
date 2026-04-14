@@ -55,8 +55,7 @@ async def test_upload_error():
         resource="",
         request_id="",
         host_id="",
-        response=None
-
+        response=None,
     )
 
     service = MinioService(mock_client, "test-bucket")
@@ -92,7 +91,7 @@ def test_get_object_not_found():
         resource="",
         request_id="",
         host_id="",
-        response=None
+        response=None,
     )
 
     service = MinioService(mock_client, "test-bucket")

@@ -8,11 +8,9 @@ from services.alpha_vantage_service import ExchangeService
 async def test_get_rates_success():
     service = ExchangeService()
 
-    service.adapter.get_rate = AsyncMock(return_value={
-        "Realtime Currency Exchange Rate": {
-            "5. Exchange Rate": "100.0"
-        }
-    })
+    service.adapter.get_rate = AsyncMock(
+        return_value={"Realtime Currency Exchange Rate": {"5. Exchange Rate": "100.0"}}
+    )
 
     result = await service.get_rates()
 
