@@ -1,0 +1,38 @@
+#root {
+    display: flex;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(#F8F9FA, #E8EAED);
+    height: 100vh;
+    font-family: "Rubik Spray Paint", system-ui;
+    font-weight: 100;
+    font-style: normal;
+}
+h1{
+    font-weight: 100;
+}
+
+h2{
+    font-weight: 100;
+}
+
+h3{
+    font-weight: 100;
+}
+
+input {
+    font-family: "Rubik Spray Paint", system-ui;
+    font-weight: 100;
+}
+
+button {
+    font-family: "Rubik Spray Paint", system-ui;
+    font-weight: 40;
+}
+
+select {
+    font-family: "Rubik Spray Paint", system-ui;
+}

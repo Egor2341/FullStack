@@ -1,0 +1,134 @@
+.page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.main {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.part {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.left_title {
+    background: linear-gradient(#BDC1C6, #B9BABC);
+    box-shadow: 0px 37.5px 75px rgba(0, 0, 0, 0.25);
+    border-radius: 8%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 60%;
+
+}
+
+.right_title {
+    background: linear-gradient(#F59E0B, #D97706);
+    box-shadow: 0px 37.5px 75px rgba(0, 0, 0, 0.25);
+    border-radius: 8%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 60%;
+
+}
+
+.add {
+    margin-top: 2%;
+    margin-bottom: 2%;
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+    justify-content: space-between;
+}
+
+.right_btn {
+    background: linear-gradient(#ffb73b, #f18b17);
+    border: 0;
+    border-radius: 8%;
+    height: 50px;
+    width: 100px;
+}
+
+.input {
+    margin-left: 10%;
+    margin-right: 10%;
+    text-align: end;
+    font-size: 20px;
+    height: 35px;
+    width: 700px;
+    background: white;
+    border: transparent;
+}
+
+
+.part_total {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.left_btn {
+    background: linear-gradient(#e9edf0, #c3c5c9);
+    border: 0;
+    border-radius: 8%;
+    height: 50px;
+    width: 100px;
+}
+
+.year {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 70%;
+}
+
+.list {
+    height: 40px;
+    font-size: 25px;
+}
+
+.category {
+    align-items: center;
+    margin-top: 2%;
+    background: transparent;
+    border-radius: 8%;
+    padding-left: 10%;
+    padding-right: 10%;
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+}
+
+.category_button {
+    background: transparent;
+    border: 0;
+}
+
+.scroll {
+    height: 450px; 
+    width: 70%;
+    overflow-y: auto; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.btn_exit {
+    height: 10%;
+    margin-top: 2%;
+    margin-right: 2%;
+    border-radius: 10%;
+}

@@ -1,0 +1,73 @@
+from typing import Annotated
+
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from data.init_bd import get_session
+from data.repositories import incomes_repository
+from models.statistics.item import ItemResponseDto
+from services.security import get_user_from_token, RoleChecker
+
+router = APIRouter(
+    prefix="/api/incomes",
+    tags=["incomes"]
+)
+
+
+@router.get("", status_code=200)
+async def get_incomes(
+        current_user_uuid: str = Depends(get_user_from_token),
+        session: AsyncSession = Depends(get_session),
+        page: int = 0,
+        order: bool = True
+):
+    return await incomes_repository.get_incomes(
+        session,
+        current_user_uuid,
+        page,
+        order
+    )
+
+
+@router.get("/categories", status_code=200)
+async def get_categories(
+        user_uuid: Annotated[str, Depends(RoleChecker(allowed_roles=["user"]))],
+        session: AsyncSession = Depends(get_session)
+):
+    return await incomes_repository.get_categories(session, user_uuid)
+
+@router.post("", status_code=201)
+async def add_income(
+        data: ItemResponseDto,
+        current_user_uuid: str = Depends(get_user_from_token),
+        session: AsyncSession = Depends(get_session)
+
+):
+    await incomes_repository.add_income(session, data, current_user_uuid)
+    await session.commit()
+
+
+@router.patch("", status_code=200)
+async def edit_category(
+        data: ItemResponseDto,
+        current_user_uuid: str = Depends(get_user_from_token),
+        session: AsyncSession = Depends(get_session)
+):
+    await incomes_repository.edit_income(session, data, current_user_uuid)
+    await session.commit()
+
+
+@router.delete("", status_code=200)
+async def delete_category(
+        title: str,
+        current_user_uuid: str = Depends(get_user_from_token),
+        session: AsyncSession = Depends(get_session)
+):
+    await incomes_repository.delete_income(session, title, current_user_uuid)
+    await session.commit()
+
+
+@router.get("/search", status_code=200)
+async def search(title: str, year: int, month: str, current_user_uuid: str = Depends(get_user_from_token),
+                 session: AsyncSession = Depends(get_session)):
+    return await incomes_repository.search_income(title, year, month, current_user_uuid, session)
