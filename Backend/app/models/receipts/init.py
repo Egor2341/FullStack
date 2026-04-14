@@ -7,4 +7,5 @@ class Init(BaseModel):
     receipts: List["Receipt"]
     count: int
 
+
 from models.receipts.one import Receipt

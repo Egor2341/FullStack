@@ -10,7 +10,7 @@ def download_file(service: MinioService, filename: str):
         return StreamingResponse(
             obj,
             media_type="application/octet-stream",
-            headers={"Content-Disposition": f"attachment; filename={filename}"}
+            headers={"Content-Disposition": f"attachment; filename={filename}"},
         )
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="File not found")

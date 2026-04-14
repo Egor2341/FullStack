@@ -1,12 +1,15 @@
 import { describe, expect, it, vi, beforeEach } from "vitest"
 
+type RejectedHandler = (error: unknown) => unknown
+
 function makeAxiosMock() {
-  let responseRejected: ((e: any) => any) | undefined
-  const instance: any = {
+  let responseRejected: RejectedHandler | undefined
+
+  const instance = {
     interceptors: {
       request: { use: vi.fn() },
       response: {
-        use: vi.fn((_onFulfilled: any, onRejected: any) => {
+        use: vi.fn((_onFulfilled: unknown, onRejected: RejectedHandler) => {
           responseRejected = onRejected
         }),
       },

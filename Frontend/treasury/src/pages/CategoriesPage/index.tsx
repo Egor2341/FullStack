@@ -1,13 +1,10 @@
 import styles from "./style.module.css"
 import { MdDelete } from "react-icons/md"
 import { FaEdit } from "react-icons/fa"
-import { MdOutlineExitToApp } from "react-icons/md"
 import { useCategories } from "../../hooks/useCategories"
-import authService from "../../api/authService"
 import { useState } from "react"
 import categoryService from "../../api/categoryService"
 import { PaginationButtons } from "../../components/pagination"
-import { Exit } from "../../components/exit"
 import { Title } from "../../components/title_navigate"
 
 export const CategoriesPage = () => {

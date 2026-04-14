@@ -19,7 +19,9 @@ LIMIT = 5
 
 
 async def add_category(session: AsyncSession, data: CategoryDto, user_uuid: str):
-    query = select(User).options(selectinload(User.categories)).filter_by(uuid=user_uuid)
+    query = (
+        select(User).options(selectinload(User.categories)).filter_by(uuid=user_uuid)
+    )
     result = await session.execute(query)
     user = result.scalar_one_or_none()
     if user is None:
@@ -44,20 +46,12 @@ async def update_category(session: AsyncSession, data: EditDto):
     )
 
 
-async def get_all_categories(session: AsyncSession,
-                             user_uuid: str
-                             ) -> ListCategories:
-    expenses = {
-        "name": [],
-        "uuid": [],
-        "count": 0
-    }
-    incomes = {
-        "name": [],
-        "uuid": [],
-        "count": 0
-    }
-    categories = await session.execute(select(Category).order_by(Category.name).where(Category.user_uuid == user_uuid))
+async def get_all_categories(session: AsyncSession, user_uuid: str) -> ListCategories:
+    expenses = {"name": [], "uuid": [], "count": 0}
+    incomes = {"name": [], "uuid": [], "count": 0}
+    categories = await session.execute(
+        select(Category).order_by(Category.name).where(Category.user_uuid == user_uuid)
+    )
     for c in categories.scalars().all():
         if c.type == "expenses":
             if expenses["count"] < LIMIT:
@@ -76,27 +70,30 @@ async def get_all_categories(session: AsyncSession,
         e_count=expenses["count"],
         incomes=incomes["name"],
         i_uuids=incomes["uuid"],
-        i_count=incomes["count"]
+        i_count=incomes["count"],
     )
 
 
-async def get_one_type_categories(session: AsyncSession,
-                                  user_uuid: str,
-                                  type: str,
-                                  page,
-                                  order
-                                  ) -> ListOneTypeCategories:
+async def get_one_type_categories(
+    session: AsyncSession, user_uuid: str, type: str, page, order
+) -> ListOneTypeCategories:
     type = "expenses" if type == "e" else "incomes"
     stmt = select(Category)
-    stmt = stmt.order_by(Category.name) if order else stmt.order_by(Category.name.desc())
-    stmt = stmt.where(Category.user_uuid == user_uuid, Category.type == type).limit(LIMIT).offset(page * LIMIT)
+    stmt = (
+        stmt.order_by(Category.name) if order else stmt.order_by(Category.name.desc())
+    )
+    stmt = (
+        stmt.where(Category.user_uuid == user_uuid, Category.type == type)
+        .limit(LIMIT)
+        .offset(page * LIMIT)
+    )
 
     result = await session.execute(stmt)
     categories = result.scalars().all()
 
     return ListOneTypeCategories(
         categories=[cat.name for cat in categories],
-        uuids=[cat.uuid for cat in categories]
+        uuids=[cat.uuid for cat in categories],
     )
 
 
@@ -107,13 +104,9 @@ async def delete_category(session: AsyncSession, uuid, user_uuid: uuid):
         raise NoEntryError("This category does not exist")
     type = Expense if category.type == "expenses" else Income
     await session.execute(
-        delete(type)
-        .where(
+        delete(type).where(
             type.user_uuid == user_uuid,
             type.name == category.name,
         )
     )
-    await session.execute(
-        delete(Category)
-        .where(Category.uuid == uuid)
-    )
+    await session.execute(delete(Category).where(Category.uuid == uuid))

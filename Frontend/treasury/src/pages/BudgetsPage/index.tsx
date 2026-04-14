@@ -1,10 +1,8 @@
 import styles from "./style.module.css"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { FaEdit } from "react-icons/fa"
-import { MdOutlineExitToApp } from "react-icons/md"
 import type { Budget, ListBudgets, budgetType } from "../../types/budget"
 import budgetService from "../../api/budgetService"
-import authService from "../../api/authService"
 import { Title } from "../../components/title_navigate"
 
 export const BudgetsPage = () => {

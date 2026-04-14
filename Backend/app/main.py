@@ -18,20 +18,23 @@ from config import settings
 
 app = FastAPI()
 
+
 @app.get("/health", include_in_schema=False)
 async def health():
     return {"status": "ok"}
 
+
 @app.get("/api/health", include_in_schema=False)
 async def api_health():
     return {"status": "ok"}
+
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[o.strip() for o in settings.cors_origins.split(",") if o.strip()],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
 app.include_router(auth_router)
@@ -51,13 +54,15 @@ async def sitemap(request: Request):
 
     routes = ["/welcome"]
     for route in routes:
-        urls.append(f"""
+        urls.append(
+            f"""
         <url>
             <loc>{settings.public_base_url}{route}</loc>
             <lastmod>{datetime.now().date()}</lastmod>
             <priority>0.8</priority>
         </url>
-        """)
+        """
+        )
     xml_content = f"""<?xml version="1.0" encoding="UTF-8"?>
         <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
             {''.join(urls)}

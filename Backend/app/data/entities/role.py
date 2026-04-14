@@ -9,5 +9,7 @@ from data.init_bd import Base
 class Role(Base):
     __tablename__ = "roles"
 
-    uuid: Mapped[str] = mapped_column(primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    uuid: Mapped[str] = mapped_column(
+        primary_key=True, default=lambda: str(uuid.uuid4()), index=True
+    )
     name: Mapped[str] = mapped_column(String(64), unique=True)

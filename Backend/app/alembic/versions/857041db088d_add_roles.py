@@ -5,6 +5,7 @@ Revises: b7eb8cc52b80
 Create Date: 2026-03-19 15:14:58.465317
 
 """
+
 import uuid
 from typing import Sequence, Union
 
@@ -13,8 +14,8 @@ import sqlalchemy as sa
 from werkzeug.security import generate_password_hash
 
 # revision identifiers, used by Alembic.
-revision: str = '857041db088d'
-down_revision: Union[str, Sequence[str], None] = 'b7eb8cc52b80'
+revision: str = "857041db088d"
+down_revision: Union[str, Sequence[str], None] = "b7eb8cc52b80"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -35,7 +36,7 @@ def upgrade() -> None:
         roles_table,
         [
             {"uuid": admin_role_uuid, "name": "admin"},
-            {"uuid": user_role_uuid, "name": "user"}
+            {"uuid": user_role_uuid, "name": "user"},
         ],
     )
 
@@ -52,7 +53,11 @@ def upgrade() -> None:
     op.bulk_insert(
         users_table,
         [
-            {"uuid": user_uuid, "email": "admin@treasury.com", "password": generate_password_hash("pass1234")}
+            {
+                "uuid": user_uuid,
+                "email": "admin@treasury.com",
+                "password": generate_password_hash("pass1234"),
+            }
         ],
     )
 
@@ -67,7 +72,7 @@ def upgrade() -> None:
         ur_table,
         [
             {"user_id": user_uuid, "role_id": admin_role_uuid},
-            {"user_id": user_uuid, "role_id": user_role_uuid}
+            {"user_id": user_uuid, "role_id": user_role_uuid},
         ],
     )
     # ### end Alembic commands ###

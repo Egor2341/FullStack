@@ -18,19 +18,23 @@ async def init(session: AsyncSession, user_uuid: str) -> Init:
     res = stmt.scalars().all()
     return Init(
         receipts=[ReceiptDto(uuid=r.uuid, name=r.original_name) for r in res[:LIMIT]],
-        count=len(res)
+        count=len(res),
     )
 
 
-async def get_receipts(session: AsyncSession, user_uuid: str, page: int) -> ListReceipts:
+async def get_receipts(
+    session: AsyncSession, user_uuid: str, page: int
+) -> ListReceipts:
     stmt = await session.execute(
-        select(Receipt).where(Receipt.user_uuid == user_uuid).limit(LIMIT).offset(page * LIMIT))
+        select(Receipt)
+        .where(Receipt.user_uuid == user_uuid)
+        .limit(LIMIT)
+        .offset(page * LIMIT)
+    )
     return ListReceipts(
-        receipts=[ReceiptDto(
-            uuid=r.uuid,
-            name=r.original_name
-        )
-            for r in stmt.scalars().all()]
+        receipts=[
+            ReceiptDto(uuid=r.uuid, name=r.original_name) for r in stmt.scalars().all()
+        ]
     )
 
 
@@ -42,12 +46,14 @@ async def get_file_info(session: AsyncSession, file_uuid: str) -> Receipt:
 async def add_receipt(session: AsyncSession, user_uuid: str, file: UploadFile):
     object_name = f"{user_uuid}/{uuid.uuid4()}_{file.filename}"
 
-    session.add(Receipt(
-        object_name=object_name,
-        original_name=file.filename,
-        content_type=file.content_type,
-        user_uuid=user_uuid
-    ))
+    session.add(
+        Receipt(
+            object_name=object_name,
+            original_name=file.filename,
+            content_type=file.content_type,
+            user_uuid=user_uuid,
+        )
+    )
 
     return object_name
 
@@ -58,8 +64,6 @@ async def delete_receipt(session: AsyncSession, file_uuid: str) -> str:
     if not file:
         raise NoEntryError("This receipt does not exist")
 
-    await session.execute(
-        delete(Receipt)
-        .where(Receipt.uuid == file_uuid))
+    await session.execute(delete(Receipt).where(Receipt.uuid == file_uuid))
 
     return file.object_name

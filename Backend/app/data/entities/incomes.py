@@ -11,7 +11,9 @@ from decimal import Decimal
 class Income(Base):
     __tablename__ = "incomes"
 
-    uuid: Mapped[str] = mapped_column(primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    uuid: Mapped[str] = mapped_column(
+        primary_key=True, default=lambda: str(uuid.uuid4()), index=True
+    )
     user_uuid: Mapped[uuid] = mapped_column(ForeignKey("users.uuid"))
     name: Mapped[str] = mapped_column(String(64))
     value: Mapped[Decimal] = mapped_column(DECIMAL(10, 2))

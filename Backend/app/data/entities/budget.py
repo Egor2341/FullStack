@@ -11,7 +11,9 @@ from decimal import Decimal
 class Budget(Base):
     __tablename__ = "budgets"
 
-    uuid: Mapped[str] = mapped_column(primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    uuid: Mapped[str] = mapped_column(
+        primary_key=True, default=lambda: str(uuid.uuid4()), index=True
+    )
     user_uuid: Mapped[uuid] = mapped_column(ForeignKey("users.uuid"))
     type: Mapped[str] = mapped_column(String(16))
     month: Mapped[str] = mapped_column(String(16))

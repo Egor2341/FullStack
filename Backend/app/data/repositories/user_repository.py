@@ -31,7 +31,9 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 async def add_user(session: AsyncSession, data: Register) -> User:
-    new_user = User(email=data.email, password=hash_password(data.password.get_secret_value()))
+    new_user = User(
+        email=data.email, password=hash_password(data.password.get_secret_value())
+    )
 
     result = await session.execute(select(Role).filter_by(name="user"))
     role = result.scalar_one_or_none()
@@ -72,14 +74,9 @@ async def get_user_by_uuid(session: AsyncSession, uuid: str) -> User | None:
     return user
 
 
-async def get_users(session: AsyncSession,
-                    user_uuid: str,
-                    page: int) -> List[UserInfo]:
+async def get_users(session: AsyncSession, user_uuid: str, page: int) -> List[UserInfo]:
     stmt = (
-        select(User)
-        .options(selectinload(User.roles))
-        .limit(LIMIT)
-        .offset(LIMIT * page)
+        select(User).options(selectinload(User.roles)).limit(LIMIT).offset(LIMIT * page)
     )
 
     result = await session.execute(stmt)
@@ -88,7 +85,9 @@ async def get_users(session: AsyncSession,
     mapped_users = []
     for user in users:
         if user.email != "admin@treasury.com" and user.uuid != user_uuid:
-            mapped_users.append(UserInfo(email=user.email, roles=[r.name for r in user.roles]))
+            mapped_users.append(
+                UserInfo(email=user.email, roles=[r.name for r in user.roles])
+            )
 
     return mapped_users
 
@@ -117,7 +116,8 @@ async def delete_admin(session: AsyncSession, email: str) -> User:
     if email == "admin@treasury.com":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="You don't have enough permissions")
+            detail="You don't have enough permissions",
+        )
 
     query = select(User).options(selectinload(User.roles)).filter_by(email=email)
     result = await session.execute(query)
@@ -135,20 +135,44 @@ async def delete_admin(session: AsyncSession, email: str) -> User:
     return user
 
 
-async def get_statistics(session: AsyncSession, type_data: str, type_value: str, year: int, month: str) -> Stat:
-    stmt = select(User).options(selectinload(User.expenses)) if type_data == "e" else select(User).options(
-        selectinload(User.incomes))
+async def get_statistics(
+    session: AsyncSession, type_data: str, type_value: str, year: int, month: str
+) -> Stat:
+    stmt = (
+        select(User).options(selectinload(User.expenses))
+        if type_data == "e"
+        else select(User).options(selectinload(User.incomes))
+    )
     res = await session.execute(stmt)
 
     users = res.all()
 
     if type_data == "e":
-        values = [[e.value for e in user[0].expenses if e.year == year] for user in users] if month == "Все" else [
-            [e.value for e in user[0].expenses if (e.year == year and e.month == month_to_int(month))] for user in
-            users]
+        values = (
+            [[e.value for e in user[0].expenses if e.year == year] for user in users]
+            if month == "Все"
+            else [
+                [
+                    e.value
+                    for e in user[0].expenses
+                    if (e.year == year and e.month == month_to_int(month))
+                ]
+                for user in users
+            ]
+        )
     else:
-        values = [[i.value for i in user[0].incomes if i.year == year] for user in users] if month == "Все" else [
-            [i.value for i in user[0].incomes if (i.year == year and i.month == month_to_int(month))] for user in users]
+        values = (
+            [[i.value for i in user[0].incomes if i.year == year] for user in users]
+            if month == "Все"
+            else [
+                [
+                    i.value
+                    for i in user[0].incomes
+                    if (i.year == year and i.month == month_to_int(month))
+                ]
+                for user in users
+            ]
+        )
 
     if type_value == "Сумма":
         value = sum([sum(v, Decimal(0)) for v in values], Decimal(0))

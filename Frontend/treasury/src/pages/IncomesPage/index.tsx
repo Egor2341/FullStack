@@ -5,7 +5,6 @@ import { MdDelete } from "react-icons/md"
 import type { ListItems } from "../../types/item"
 import itemService from "../../api/itemService"
 import { PaginationButtons } from "../../components/pagination"
-import { Exit } from "../../components/exit"
 import { Title } from "../../components/title_navigate"
 
 export const IncomesPage = () => {

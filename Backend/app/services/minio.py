@@ -62,6 +62,7 @@ from exceptions.MinioUploadError import MinioUploadError
 # async def delete_from_minio(filename: str):
 #     client.remove_object(bucket_name, filename)
 
+
 class MinioService:
     def __init__(self, client: Minio, bucket_name: str):
         self.client = client
@@ -93,9 +94,7 @@ class MinioService:
 
     def get_presigned_url(self, filename: str) -> str:
         return self.client.presigned_get_object(
-            self.bucket_name,
-            filename,
-            expires=timedelta(minutes=5)
+            self.bucket_name, filename, expires=timedelta(minutes=5)
         )
 
     async def delete(self, filename: str) -> None:

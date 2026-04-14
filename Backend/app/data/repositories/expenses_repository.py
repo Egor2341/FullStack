@@ -30,8 +30,13 @@ async def add_expense(session: AsyncSession, data: ItemResponseDto, user_uuid: u
     result = await session.execute(query)
     expense = result.scalar_one_or_none()
     if expense is None:
-        expense = Expense(user_uuid=user_uuid, name=category.name, value=data.value,
-                          month=cur_date.month, year=cur_date.year)
+        expense = Expense(
+            user_uuid=user_uuid,
+            name=category.name,
+            value=data.value,
+            month=cur_date.month,
+            year=cur_date.year,
+        )
 
         session.add(expense)
     else:
@@ -40,62 +45,55 @@ async def add_expense(session: AsyncSession, data: ItemResponseDto, user_uuid: u
 
 
 async def get_expenses(
-        session: AsyncSession,
-        user_uuid: str,
-        page: int,
-        order: bool
+    session: AsyncSession, user_uuid: str, page: int, order: bool
 ) -> ListItems:
     stmt = select(Expense).filter_by(user_uuid=user_uuid)
-    stmt = stmt.order_by(Expense.value) if order else stmt.order_by(Expense.value.desc())
+    stmt = (
+        stmt.order_by(Expense.value) if order else stmt.order_by(Expense.value.desc())
+    )
     stmt = stmt.limit(LIMIT).offset(LIMIT * page)
     result = await session.execute(stmt)
     expenses = result.scalars().all()
 
     return ListItems(
         total=sum([exp.value for exp in expenses], Decimal(0)),
-        items=[ItemResponseDto(name=exp.name, value=exp.value) for exp in expenses]
+        items=[ItemResponseDto(name=exp.name, value=exp.value) for exp in expenses],
     )
 
 
-async def get_categories(
-        session: AsyncSession,
-        user_uuid: str
-) -> Categories:
+async def get_categories(session: AsyncSession, user_uuid: str) -> Categories:
     dbdata = await session.execute(
-        select(Category.name).order_by(Category.name).where(Category.user_uuid == user_uuid,
-                                                            Category.type == "expenses"))
-    return Categories(
-        categories=list(dbdata.scalars().all())
+        select(Category.name)
+        .order_by(Category.name)
+        .where(Category.user_uuid == user_uuid, Category.type == "expenses")
     )
+    return Categories(categories=list(dbdata.scalars().all()))
 
 
 async def edit_expense(session: AsyncSession, data: ItemResponseDto, user_uuid: uuid):
     await session.execute(
         update(Expense)
-        .where(
-            Expense.user_uuid == user_uuid,
-            Expense.name == data.name
-        )
+        .where(Expense.user_uuid == user_uuid, Expense.name == data.name)
         .values(value=data.value)
     )
 
 
 async def delete_expense(session: AsyncSession, name: str, user_uuid: uuid):
     await session.execute(
-        delete(Expense)
-        .where(
+        delete(Expense).where(
             Expense.user_uuid == user_uuid,
             Expense.name == name,
         )
     )
 
 
-async def search_expense(title: str,
-                         year: int,
-                         month: str,
-                         user_uuid: uuid,
-                         session: AsyncSession,
-                         ):
+async def search_expense(
+    title: str,
+    year: int,
+    month: str,
+    user_uuid: uuid,
+    session: AsyncSession,
+):
     if month == "Все":
         query = select(Expense).filter_by(
             user_uuid=user_uuid,
@@ -104,10 +102,7 @@ async def search_expense(title: str,
         )
     else:
         query = select(Expense).filter_by(
-            user_uuid=user_uuid,
-            name=title,
-            year=year,
-            month=month_to_int(month)
+            user_uuid=user_uuid, name=title, year=year, month=month_to_int(month)
         )
     result = await session.execute(query)
     expenses = result.scalars().all()

@@ -21,18 +21,23 @@ REFRESH_TOKEN_EXPIRE_DAYS = 7
 
 def create_access_token(data: Dict):
     to_encode = data.copy()
-    expire = datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.datetime.now(datetime.UTC) + datetime.timedelta(
+        minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+    )
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
 
 def create_refresh_token(data: Dict):
     to_encode = data.copy()
-    expire = datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    expire = datetime.datetime.now(datetime.UTC) + datetime.timedelta(
+        days=REFRESH_TOKEN_EXPIRE_DAYS
+    )
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
-def get_user_roles(token:str = Depends(oauth2_scheme)):
+def get_user_roles(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
@@ -41,7 +46,8 @@ def get_user_roles(token:str = Depends(oauth2_scheme)):
     except jwt.InvalidTokenError:
         raise InvalidTokenError("Invalid token")
 
-def get_user_from_token(token:str = Depends(oauth2_scheme)):
+
+def get_user_from_token(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload.get("sub")
@@ -60,5 +66,5 @@ class RoleChecker:
             return params["sub"]
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="You don't have enough permissions")
-
+            detail="You don't have enough permissions",
+        )

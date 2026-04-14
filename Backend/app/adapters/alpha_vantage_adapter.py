@@ -15,7 +15,7 @@ class AlphaVantageAdapter:
                         "from_currency": from_currency,
                         "to_currency": to_currency,
                         "apikey": settings.alpha_vantage_api_key,
-                    }
+                    },
                 )
 
                 response.raise_for_status()

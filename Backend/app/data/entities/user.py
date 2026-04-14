@@ -14,39 +14,36 @@ association_table = Table(
     Column("role_id", ForeignKey("roles.uuid")),
 )
 
+
 class User(Base):
     __tablename__ = "users"
 
-    uuid: Mapped[str] = mapped_column(primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    uuid: Mapped[str] = mapped_column(
+        primary_key=True, default=lambda: str(uuid.uuid4()), index=True
+    )
     email: Mapped[str] = mapped_column(String(128), unique=True)
     password: Mapped[str] = mapped_column(String(164))
 
     roles: Mapped[List["Role"]] = relationship(secondary=association_table)
 
-
     categories: Mapped[List["Category"]] = relationship(
-        back_populates="user",
-        cascade="all, delete-orphan, delete"
+        back_populates="user", cascade="all, delete-orphan, delete"
     )
 
     receipts: Mapped[List["Receipt"]] = relationship(
-        back_populates="user",
-        cascade="all, delete-orphan, delete"
+        back_populates="user", cascade="all, delete-orphan, delete"
     )
 
     expenses: Mapped[List["Expense"]] = relationship(
-        back_populates="user",
-        cascade="all, delete-orphan"
+        back_populates="user", cascade="all, delete-orphan"
     )
 
     incomes: Mapped[List["Income"]] = relationship(
-        back_populates="user",
-        cascade="all, delete-orphan"
+        back_populates="user", cascade="all, delete-orphan"
     )
 
     budgets: Mapped[List["Budget"]] = relationship(
-        back_populates="user",
-        cascade="all, delete-orphan"
+        back_populates="user", cascade="all, delete-orphan"
     )
 
 

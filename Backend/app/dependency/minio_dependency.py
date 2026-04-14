@@ -12,7 +12,7 @@ def get_minio_service() -> MinioService:
         settings.minio_endpoint,
         access_key=settings.minio_user,
         secret_key=settings.minio_password,
-        secure=settings.minio_secure
+        secure=settings.minio_secure,
     )
 
     service = MinioService(client, settings.minio_bucket)

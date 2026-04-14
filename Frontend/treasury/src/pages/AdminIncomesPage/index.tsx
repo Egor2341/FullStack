@@ -1,8 +1,6 @@
 import styles from "./style.module.css"
 import { useCallback, useEffect, useState } from "react"
-import { MdOutlineExitToApp } from "react-icons/md"
 import statService from "../../api/statService"
-import authService from "../../api/authService"
 import { Title } from "../../components/title_navigate"
 
 export const AdminIncomesPage = () => {
