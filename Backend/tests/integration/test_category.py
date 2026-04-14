@@ -1,5 +1,5 @@
 import pytest
-from tests.conftest import test_user, create_test_token
+from tests.conftest import create_test_token
 
 test_category_dto = {"name": "Rent", "type": "expenses"}
 

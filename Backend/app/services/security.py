@@ -1,9 +1,7 @@
 import datetime
-import os
 from typing import Dict, Annotated, Any
 
 import jwt
-from dotenv import load_dotenv
 from fastapi import HTTPException, status
 from fastapi.params import Depends
 from fastapi.security import OAuth2PasswordBearer

@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import select
 
 from data.entities.role import Role
-from tests.conftest import client, create_test_token
+from tests.conftest import create_test_token
 
 test_user_data = {"email": "test@example.com", "password": "password123"}
 

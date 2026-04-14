@@ -1,11 +1,8 @@
 import io
 from datetime import timedelta
 
-from fastapi import HTTPException
 from minio import Minio, S3Error
-from starlette.responses import StreamingResponse
 
-from config import settings
 from exceptions.MinioUploadError import MinioUploadError
 
 # bucket_name = "receipts"

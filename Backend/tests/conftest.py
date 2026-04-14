@@ -5,7 +5,6 @@ import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 from testcontainers.postgres import PostgresContainer
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from data.repositories.category_repository import add_category
 
 from data.entities.role import Role
 from data.entities.user import User
@@ -13,9 +12,7 @@ from data.init_bd import Base, get_session
 
 import os
 
-from fastapi.testclient import TestClient
 from main import app
-from models.categories.category import CategoryDto
 from services.security import SECRET_KEY, ALGORITHM
 
 os.environ["TESTCONTAINERS_RYUK_DISABLED"] = "true"
@@ -64,7 +61,7 @@ async def engine(postgres_container):
                 ],
             )
         except Exception as e:
-            pass
+            print(e)
 
     yield engine
 

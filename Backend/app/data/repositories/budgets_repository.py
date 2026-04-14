@@ -2,7 +2,7 @@ import datetime
 import uuid
 from decimal import Decimal
 
-from sqlalchemy import select, update, delete
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from data.entities.budget import Budget
