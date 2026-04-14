@@ -1,0 +1,21 @@
+# Root ignores (monorepo)
+.env
+.env.*
+
+# Frontend
+Frontend/**/node_modules/
+Frontend/**/dist/
+Frontend/**/dist-ssr/
+
+# Backend
+Backend/**/__pycache__/
+Backend/**/.pytest_cache/
+Backend/**/.venv/
+Backend/**/venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+**/*.log

@@ -1,0 +1,16 @@
+# Prevent huge build contexts from root
+.git/
+.vscode/
+.idea/
+
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+
+**/node_modules/
+**/dist/
+
+**/.env
+**/.env.*
+
+**/*.log
