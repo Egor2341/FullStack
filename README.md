@@ -28,13 +28,30 @@ Treasury — full-stack веб-приложение для персональн�
 
 Проект находится в активной разработке. Паспорт и границы проекта описаны в [docs/00-project.md](docs/00-project.md).
 
+Структура, карта функций, состояние инженерных практик, риски и план семестра собраны в едином [паспорте проекта](docs/00-project.md).
+
 ## Технологии
 
-**Frontend:** React 19, TypeScript, Vite, React Router, Axios, Vitest, Testing Library.
+**Frontend:** React 19.2.4, TypeScript 5.9.3, Vite 7.1.14, React Router, Axios, Vitest, Testing Library.
 
-**Backend:** Python 3.12, FastAPI, Pydantic, SQLAlchemy 2, Alembic, PyJWT, pytest.
+**Backend:** Python 3.12.15, FastAPI, Pydantic, SQLAlchemy 2, Alembic, PyJWT, pytest.
 
 **Инфраструктура:** PostgreSQL 15, MinIO-совместимое S3-хранилище, Nginx, Docker Compose, GitHub Actions.
+
+## Закреплённые версии инструментов
+
+| Компонент | Версия |
+| --- | --- |
+| Python | 3.12.15 |
+| Node.js | 20.20.2 |
+| npm | 10.8.2 |
+| TypeScript | 5.9.3 |
+| Vite / Rolldown Vite | 7.1.14 |
+| PostgreSQL | 15.19 |
+| Nginx | 1.27.5 |
+| Silo (MinIO-compatible) | RELEASE.2026-09-16T00-00-00Z |
+| Docker Engine | 28.0.1 (проверенная версия) |
+| Docker Compose | 2.33.1 (проверенная версия) |
 
 ## Структура репозитория
 
@@ -59,8 +76,8 @@ Treasury — full-stack веб-приложение для персональн�
 
 ### Требования
 
-- Docker Engine 24+;
-- Docker Compose v2;
+- Docker Engine 28.0.1 или совместимая версия;
+- Docker Compose 2.33.1 или совместимая версия;
 - свободные порты `5432`, `8000`, `8080`, `9000` и `9001`.
 
 ### Запуск
@@ -138,10 +155,22 @@ python -m pytest -c src/backend/pytest.ini tests/backend/unit tests/backend/inte
 
 Интеграционные тесты используют Testcontainers, поэтому для них должен быть запущен Docker.
 
+Результат проверки на машине другого человека.
+25.10.2026; ОС Windows
+Успешно выполнен запуск, авторизация, создание нового элемента, удаление элемента.
+
 ## Конфигурация
 
 Основные переменные перечислены в [.env.example](.env.example): параметры PostgreSQL, JWT, объектного хранилища, Alpha Vantage, CORS и публичного URL. Секреты не должны попадать в Git.
 
+## Воспроизводимость окружения
+
+- версии Python и Node.js закреплены в [.tool-versions](.tool-versions), Dockerfile и CI;
+- версия npm закреплена полями `packageManager` и `engines` в `src/frontend/package.json`;
+- frontend-зависимости записаны без диапазонов версий и зафиксированы `package-lock.json`;
+- backend-зависимости зафиксированы оператором `==` в `requirements.prod.txt` и `requirements.ci.txt`;
+- базовые Docker-образы закреплены одновременно точным тегом и digest.
+
 ## Лицензия
 
-Открытая лицензия пока не предоставлена. Все права на исходный код сохраняются за автором; использование и распространение требуют отдельного разрешения.
+Проект распространяется на условиях проприетарной лицензии. См. файл [LICENSE](LICENSE).
