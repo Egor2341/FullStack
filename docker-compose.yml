@@ -18,7 +18,7 @@ services:
       retries: 20
 
   minio:
-    image: minio/minio:latest
+    image: docker.io/pgsty/silo:RELEASE.2026-09-16T00-00-00Z
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: ${MINIO_USER:-minioadmin}
@@ -38,7 +38,7 @@ services:
 
   backend:
     build:
-      context: ./Backend
+      context: ./src/backend
       dockerfile: Dockerfile
     environment:
       DB_HOST: ${DB_HOST:-postgres}
@@ -78,7 +78,7 @@ services:
 
   frontend:
     build:
-      context: ./Frontend/treasury
+      context: ./src/frontend
       dockerfile: Dockerfile
       args:
         VITE_BASE_API_URL: /api

@@ -3,15 +3,17 @@
 .env.*
 
 # Frontend
-Frontend/**/node_modules/
-Frontend/**/dist/
-Frontend/**/dist-ssr/
+src/frontend/node_modules/
+src/frontend/dist/
+src/frontend/dist-ssr/
 
 # Backend
-Backend/**/__pycache__/
-Backend/**/.pytest_cache/
-Backend/**/.venv/
-Backend/**/venv/
+src/backend/**/__pycache__/
+src/backend/**/.pytest_cache/
+src/backend/.venv/
+src/backend/venv/
+tests/**/__pycache__/
+tests/**/.pytest_cache/
 
 # IDE
 .vscode/

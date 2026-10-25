@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Frontend/treasury
+        working-directory: src/frontend
     steps:
       - uses: actions/checkout@v4
 
@@ -25,8 +25,7 @@ jobs:
           cache: "npm"
           # Allow for different folder casing in repo
           cache-dependency-path: |
-            Frontend/treasury/package-lock.json
-            frontend/treasury/package-lock.json
+            src/frontend/package-lock.json
 
       - name: Install
         run: npm ci
@@ -46,9 +45,6 @@ jobs:
   backend:
     name: Backend (lint, test, build)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Backend
     steps:
       - uses: actions/checkout@v4
 
@@ -58,25 +54,24 @@ jobs:
           cache: "pip"
           # Cache based on the actual CI requirements file; allow folder casing differences
           cache-dependency-path: |
-            Backend/requirements.ci.txt
-            backend/requirements.ci.txt
+            src/backend/requirements.ci.txt
 
       - name: Install
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.ci.txt
+          pip install -r src/backend/requirements.ci.txt
 
       - name: Lint (black)
-        run: python -m black --check app tests
+        run: python -m black --config src/backend/.black --check src/backend/app tests/backend
 
       - name: Lint (flake8)
-        run: python -m flake8 app
+        run: python -m flake8 --config src/backend/.flake8 src/backend/app
 
       - name: Test
-        run: python -m pytest -q tests/unit tests/integration
+        run: python -m pytest -c src/backend/pytest.ini -q tests/backend/unit tests/backend/integration
 
       - name: Docker build (backend)
-        run: docker build -t treasury-backend:ci .
+        run: docker build -t treasury-backend:ci src/backend
 
   deploy:
     name: Build & Push Docker Images
@@ -95,7 +90,7 @@ jobs:
       - name: Build & push frontend
         uses: docker/build-push-action@v6
         with:
-          context: ./Frontend/treasury
+          context: ./src/frontend
           push: true
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/treasury-frontend:latest
@@ -104,7 +99,7 @@ jobs:
       - name: Build & push backend
         uses: docker/build-push-action@v6
         with:
-          context: ./Backend
+          context: ./src/backend
           push: true
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/treasury-backend:latest
