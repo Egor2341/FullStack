@@ -81,6 +81,7 @@ Treasury организован как монорепозиторий клиен
 | `tests/backend/` | Unit-, integration- и end-to-end-тесты backend и системы |
 | `tests/frontend/` | Модульные и компонентные тесты frontend |
 | `docs/00-project.md` | Единый паспорт и основная проектная документация |
+| `docs/01-requirements.md` | Функциональные требования, приоритеты и ограничения |
 | `.github/workflows/` | Непрерывная интеграция и публикация Docker-образов |
 | `docker-compose.yml` | Оркестрация PostgreSQL, Silo, backend и frontend |
 | `.env.example` | Шаблон переменных окружения без секретов |
@@ -219,7 +220,7 @@ PostgreSQL содержит таблицы `users`, `roles`, `user_roles`, `cate
 | Миграции БД | Да | Alembic запускается перед стартом API |
 | Управление конфигурацией | Да | Pydantic Settings, `.env.example`, Compose variables и Vite build argument |
 | Фиксация зависимостей | Да | `package-lock.json`, точные Python requirements, `.tool-versions`, digests образов |
-| Основная документация | Да | README и настоящий паспорт проекта |
+| Основная документация | Да | README, настоящий паспорт и требования к функционалу |
 | Лицензия | Да | Проприетарная `All Rights Reserved` |
 | Журнал изменений | Нет | `CHANGELOG.md` существует, но пока пуст |
 | Security scan | Нет | Dependabot, CodeQL, `pip-audit` и обязательный `npm audit` не настроены |
