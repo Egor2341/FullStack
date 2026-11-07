@@ -1,0 +1,45 @@
+@startuml sequence-us4-expense
+skinparam defaultFontName "Segoe UI"
+skinparam shadowing false
+title US-4. Добавление расхода (FR-4)
+autonumber
+
+actor "Пользователь" as U
+participant "SPA\n(React)" as F
+participant "API\n(FastAPI)" as B
+database "PostgreSQL" as DB
+
+U -> F : открыть /expences
+F -> B : GET /api/categories?type=expenses
+B -> DB : SELECT categories\nWHERE user_uuid = текущий
+DB --> B : [«Бензин», ...]
+B --> F : 200 ["Бензин", ...]
+F -> B : GET /api/expenses?page=0
+B -> DB : SELECT expenses\nWHERE user_uuid = текущий
+DB --> B : {total, items}
+B --> F : 200 {total, items}
+F --> U : список расходов
+
+U -> F : выбрать «Бензин»,\nсумма 3500.00, нажать «Добавить»
+F -> B : POST /api/expenses\n{"name": "Бензин", "value": 3500.00}
+B -> DB : SELECT category\nWHERE user_uuid = ... AND name = 'Бензин'
+
+alt Категория не найдена
+  B --> F : 422 {"detail": "The category does not exist"}
+  F --> U : «Ошибка при попытке\nдобавить категорию»\nзапись не создаётся
+else Категория найдена
+  B -> DB : SELECT expense\nWHERE user_uuid = ... AND name = 'Бензин'
+  alt Расход уже существует
+    B --> F : 422 {"detail": "This expense already exist"}
+    F --> U : «Ошибка при попытке\nдобавить категорию»\nвторая запись не создаётся
+  else Расхода ещё нет
+    B -> DB : INSERT expenses\n(value = 3500.00,\nmonth = 11, year = 2026)
+    DB --> B : OK
+    B --> F : 201 Created
+    F -> B : GET /api/expenses?page=0
+    B --> F : 200 {total, items}
+    F --> U : «Бензин — 3500.00»
+  end
+end
+
+@enduml

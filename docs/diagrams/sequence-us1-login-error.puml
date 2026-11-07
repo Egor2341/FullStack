@@ -1,0 +1,27 @@
+@startuml sequence-us1-login-error
+skinparam defaultFontName "Segoe UI"
+skinparam shadowing false
+title US-1. Вход в систему: успех и неверный пароль (FR-1)
+autonumber
+
+actor "Пользователь" as U
+participant "SPA\n(React)" as F
+participant "API\n(FastAPI)" as B
+database "PostgreSQL" as DB
+
+U -> F : email = new.user@example.com,\npassword = wrong123
+F -> B : POST /api/auth/login\n{email, password}
+B -> DB : SELECT users WHERE email = ...
+DB --> B : пользователь найден\n(или NULL)
+B -> B : проверить пароль\nпо сохранённому хешу
+
+alt Пользователь не найден\nили пароль не совпал
+  B --> F : 422 {"detail": "User not exist"}
+  F --> U : сообщение «Неверные данные»\nпользователь остаётся на /login\nтокены не создаются
+else Пароль верный
+  B --> F : 200 {access_token, refresh_token,\ntoken_type: "bearer"}
+  F -> F : сохранить токены\nв localStorage
+  F --> U : переход на /main\n(администратор — на /admin/main)
+end
+
+@enduml

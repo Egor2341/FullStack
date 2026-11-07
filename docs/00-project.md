@@ -81,7 +81,8 @@ Treasury организован как монорепозиторий клиен
 | `tests/backend/` | Unit-, integration- и end-to-end-тесты backend и системы |
 | `tests/frontend/` | Модульные и компонентные тесты frontend |
 | `docs/00-project.md` | Единый паспорт и основная проектная документация |
-| `docs/01-requirements.md` | Функциональные требования, пользовательские сценарии и ограничения |
+| `docs/01-requirements.md` | Функциональные требования, пользовательские сценарии, модели системы и ограничения |
+| `docs/diagrams/` | Исходники PlantUML и PNG-экспорт моделей системы |
 | `.github/workflows/` | Непрерывная интеграция и публикация Docker-образов |
 | `docker-compose.yml` | Оркестрация PostgreSQL, Silo, backend и frontend |
 | `.env.example` | Шаблон переменных окружения без секретов |
