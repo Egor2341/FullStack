@@ -162,6 +162,12 @@ python -m pytest -c src/backend/pytest.ini tests/backend/unit tests/backend/inte
 
 Интеграционные тесты используют Testcontainers, поэтому для них должен быть запущен Docker.
 
+Только тесты контракта операции `POST /api/expenses` из лабораторной работы 3:
+
+```powershell
+python -m pytest -c src/backend/pytest.ini tests/backend/integration/test_expense.py -v
+```
+
 Результат проверки на машине другого человека.
 25.10.2026; ОС Windows
 Успешно выполнен запуск, авторизация, создание нового элемента, удаление элемента.
