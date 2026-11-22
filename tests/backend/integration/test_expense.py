@@ -31,7 +31,7 @@ async def test_create_expense(client, db_session, create_category):
     token = create_test_token(["user"])
     response = await client.post("/expenses", json=test_expense, headers={"Authorization": f"Bearer {token}"})
 
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert response.json() is None
 
     result = await db_session.execute(
