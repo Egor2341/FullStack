@@ -1,0 +1,36 @@
+@startuml context
+!pragma layout smetana
+skinparam defaultFontName "Segoe UI"
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam rectangle {
+  BackgroundColor #F8F9FA
+  BorderColor #333333
+}
+left to right direction
+
+actor "Пользователь\n(роль user)" as User
+actor "Администратор\n(роль admin)" as Admin
+
+rectangle "Treasury\n(веб-приложение: React + FastAPI)" as Treasury {
+  component "Личный кабинет,\nучёт доходов и расходов,\nбюджеты, чеки" as Core
+}
+
+database "PostgreSQL\n(хранение данных)" as DB
+cloud "S3-хранилище\n(файлы чеков)" as S3
+cloud "Alpha Vantage API\n(курсы валют)" as Alpha
+cloud "Почтовый сервис\n(FR-10, потом)" as Mail
+
+User --> Treasury : работает через браузер
+Admin --> Treasury : администрирует
+Treasury --> DB : читает и сохраняет данные
+Treasury --> S3 : загружает и удаляет чеки
+Treasury --> Alpha : запрашивает курсы\nUSD, EUR, CNY к RUB
+Treasury ..> Mail : отправляет ссылку\nвосстановления пароля
+
+note bottom of Treasury
+  Границы системы: frontend, backend и API.
+  PostgreSQL, S3, Alpha Vantage и почтовый сервис —
+  внешние системы, с которыми Treasury обменивается данными.
+end note
+@enduml

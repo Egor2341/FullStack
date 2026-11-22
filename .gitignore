@@ -1,23 +1,71 @@
-# Root ignores (monorepo)
+# Environment and secrets
 .env
 .env.*
+!.env.example
+*.pem
+*.key
+*.crt
 
-# Frontend
-src/frontend/node_modules/
-src/frontend/dist/
-src/frontend/dist-ssr/
+# JavaScript / TypeScript
+**/node_modules/
+**/dist/
+**/dist-ssr/
+**/.vite/
+**/.cache/
+**/coverage/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Backend
-src/backend/**/__pycache__/
-src/backend/**/.pytest_cache/
-src/backend/.venv/
-src/backend/venv/
-tests/**/__pycache__/
-tests/**/.pytest_cache/
+# Python
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.coverage
+**/.coverage.*
+**/htmlcov/
+**/.tox/
+**/.nox/
+**/.venv/
+**/venv/
+**/env/
+**/ENV/
+**/build/
+**/develop-eggs/
+**/downloads/
+**/eggs/
+**/.eggs/
+**/lib/
+**/lib64/
+**/parts/
+**/sdist/
+**/var/
+**/wheels/
+**/*.egg-info/
+**/.installed.cfg
+**/*.egg
 
-# IDE
+# Editors and operating systems
 .vscode/
 .idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 
-# Logs
+# Runtime files
 **/*.log
+**/*.pid

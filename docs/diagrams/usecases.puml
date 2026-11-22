@@ -1,0 +1,43 @@
+@startuml usecases
+!pragma layout smetana
+skinparam defaultFontName "Segoe UI"
+skinparam shadowing false
+skinparam packageStyle rectangle
+left to right direction
+
+actor "Пользователь\n(роль user)" as User
+actor "Администратор\n(роль admin)" as Admin
+
+Admin -|> User
+
+rectangle "Treasury" {
+  usecase "UC-1\nРегистрация, вход и выход\n(FR-1)" as UC1
+  usecase "UC-2\nУправление категориями\n(FR-2)" as UC2
+  usecase "UC-3\nУчёт доходов\n(FR-3)" as UC3
+  usecase "UC-4\nУчёт расходов\n(FR-4)" as UC4
+  usecase "UC-5\nПлановый и фактический\nбюджет (FR-5)" as UC5
+  usecase "UC-6\nЗагрузка, просмотр\nи удаление чеков (FR-6)" as UC6
+  usecase "UC-7\nПросмотр курсов валют\n(FR-7)" as UC7
+  usecase "UC-10\nВосстановление пароля\n(FR-10, потом)" as UC10
+
+  usecase "UC-8\nУправление пользователями\nи ролями (FR-8)" as UC8
+  usecase "UC-9\nАдминистративная\nстатистика (FR-9)" as UC9
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+User --> UC10
+
+Admin --> UC8
+Admin --> UC9
+
+note right of UC10
+  Целевая функция: в текущей
+  версии отсутствует (FR-10).
+end note
+@enduml

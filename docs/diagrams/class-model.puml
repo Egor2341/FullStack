@@ -1,0 +1,61 @@
+﻿@startuml class-model
+!pragma layout smetana
+skinparam defaultFontName "Segoe UI"
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam nodesep 45
+skinparam ranksep 45
+hide circle
+top to bottom direction
+title Модель данных: пять основных сущностей предметной области
+
+class "Роль" as Role {
+  + uuid: UUID
+  + name: string
+}
+
+class "Пользователь" as User {
+  + uuid: UUID
+  + email: string
+  + password_hash: string
+}
+
+class "Категория" as Category {
+  + uuid: UUID
+  + name: string
+  + type: "income" | "expense"
+}
+
+class "Доход" as Income {
+  + uuid: UUID
+  + name: string
+  + value: decimal
+  + month: integer
+  + year: integer
+}
+
+class "Расход" as Expense {
+  + uuid: UUID
+  + name: string
+  + value: decimal
+  + month: integer
+  + year: integer
+}
+
+Role "0..*" -- "0..*" User : имеет роль >
+User "1" -- "0..*" Category : владеет >
+Category "1" -- "0..*" Income : классифицирует >
+Category "1" -- "0..*" Expense : классифицирует >
+User "1" -- "0..*" Income : учитывает >
+User "1" -- "0..*" Expense : учитывает >
+
+legend bottom
+  password_hash — необратимый хеш пароля (NFR-3); связь «Пользователь — Роль»
+  реализована таблицей user_roles.
+  Для расхода действует ограничение: одна запись на категорию пользователя,
+  месяц и год фиксируются при создании.
+  Сущности «Бюджет» (budgets) и «Чек» (receipts) также связаны с «Пользователь»
+  отношением 1:N, но опущены, чтобы диаграмма осталась в пределах 3–5 сущностей.
+endlegend
+@enduml
+

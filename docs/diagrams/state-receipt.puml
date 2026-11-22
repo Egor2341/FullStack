@@ -1,0 +1,21 @@
+@startuml state-receipt
+!pragma layout smetana
+skinparam defaultFontName "Segoe UI"
+skinparam shadowing false
+top to bottom direction
+title Жизненный цикл чека (FR-6)
+
+state "Загружается" as Loading
+state "Хранится" as Stored
+state "Ошибка загрузки" as Error
+state "Удаляется" as Deleting
+
+[*] --> Loading : POST /api/receipts\nвыбран файл
+Loading --> Stored : файл сохранён в S3,\nметаданные — в PostgreSQL
+Loading --> Error : файл не выбран\nили S3 недоступен
+Error --> [*] : сообщение «Не удалось\nзагрузить изображение»;\nзапись не создаётся
+
+Stored --> Deleting : DELETE /api/receipts\n(владелец)
+Deleting --> [*] : строка и объект в S3 удалены
+Deleting --> Stored : S3 вернул ошибку,\nданные не удалены
+@enduml
