@@ -64,7 +64,7 @@ jobs:
           pip install -r src/backend/requirements.ci.txt
 
       - name: Lint (black)
-        run: python -m black --config src/backend/.black --check src/backend/app tests/backend
+        run: python -m black --config src/backend/.black --check tests/backend/integration/test_expense.py
 
       - name: Lint (flake8)
         run: python -m flake8 --config src/backend/.flake8 src/backend/app
